@@ -1,0 +1,42 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./docker/ #path to docker file
+      dockerfile: .dockerfileApi
+    env_file:
+      - .env
+    volumes:
+      - ./:/usr/share/nginx/api:cached
+      - ./docker/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - mysql
+    networks:
+      - backend
+  http-nginx:
+    image: nginx:1.14.2-alpine
+    ports:
+      - "${API_PORT}:80"
+    volumes:
+      - ./docker/http-nginx.conf:/etc/nginx/conf.d/default.conf:cached
+      - ./:/usr/share/nginx/api:cached
+    links:
+      - api
+      - mysql
+    networks:
+      - backend
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "${MYSQL_PORT}:3306"
+    environment:
+      MYSQL_DATABASE: backend
+      MYSQL_ROOT_PASSWORD: 123456
+    volumes:
+      - ./docker/mysql-data:/etc/mysql/conf.d
+    networks:
+      - backend
+networks:
+  backend:
+    external:
+      name: backend_networkd
