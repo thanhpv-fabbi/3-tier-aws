@@ -25,3 +25,6 @@ Route::group([
     Route::post('me', 'AuthController@me');
 });
 
+
+Route::resource('courses', 'CourseController');
+Route::resource('class-rooms', 'ClassRoomController');
