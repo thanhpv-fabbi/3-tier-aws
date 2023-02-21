@@ -4,30 +4,14 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
+          <th>#</th>
+          <th>Name</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td>Larry</td>
-          <td>the Bird</td>
-          <td>@twitter</td>
+        <tr v-for="item in data" :key="item.id">
+          <th>{{ item.id }}</th>
+          <th >{{ item.class_name }}</th>
         </tr>
       </tbody>
     </table>
@@ -47,9 +31,9 @@ export default {
 
   async created() {
     // GET request using fetch with async/await
-    const response = await fetch("https://api.npms.io/v2/search?q=vue");
-    const data = await response.json();
-    this.data = data.results;
+    const response = await fetch(process.env.VUE_APP_API_ENDPOINT + '/class-rooms');
+    const result = await response.json();
+    this.data = result.data;
   },
 };
 </script>
@@ -66,5 +50,6 @@ export default {
 
 table {
   margin: 0px auto;
+  text-align: left;
 }
 </style>
